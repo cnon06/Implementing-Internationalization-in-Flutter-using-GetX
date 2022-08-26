@@ -1,89 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Controller extends GetxController {
-  var count = 0.obs;
-  increment() => count++;
-  decrement() => count--;
-}
+import 'messages.dart';
+import 'mycontroller.dart';
+
+
+
 
 void main() => runApp(GetMaterialApp(
-
-        initialRoute: '/',
-      getPages: [
-        GetPage(name: '/', page: () => const Home()),
-        GetPage(name: '/NextScreen', page: () => const NextScreen(),
-        transition: Transition.fade
-        ),
-        
-      ],
-
-
+      translations: Messages(),
+      locale: const Locale('de', 'DE'),
+      fallbackLocale: const Locale('en', 'US'),
+      title: "Internationalization",
       debugShowCheckedModeBanner: false,
-      home: const Home(),
+      home:  Home(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
     ));
 
+// ignore: use_key_in_widget_constructors
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
-
+  MyController myController = Get.put(MyController());
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(Controller());
     return Scaffold(
         body: Center(
             child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Obx(() => Text("Counter: ${controller.count}",
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 30,
-            ))),
+        Text("hello".tr, style: const TextStyle(fontSize: 30),),
+        Text("data: ${Get.locale}"),
+        
         ElevatedButton(
             onPressed: () {
-              controller.increment();
+              myController.changeLanguage("en", "EN");
             },
-            child: const Text("Increase")),
-        ElevatedButton(
-            onPressed: () {
-              controller.decrement();
-            },
-            child: const Text("Decrease")),
-        ElevatedButton(
-            onPressed: () {
-              Get.to(() => const NextScreen());
-            },
-            child: const Text("To Next Page")),
-        ElevatedButton(
-            onPressed: () {
-              Get.toNamed("/NextScreen");
-            },
-            child: const Text("To Next Page With Name"))
-      ],
-    )));
-  }
-}
+            child: const Text("English")),
 
-class NextScreen extends StatelessWidget {
-  const NextScreen({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    final Controller controller = Get.find();
-    return Scaffold(
-        body: Center(
-            child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text("This is Next Screen: ${controller.count}"),
+
         ElevatedButton(
             onPressed: () {
-              Get.back();
+              myController.changeLanguage("de", "DE");
             },
-            child: const Text("Go Back"))
+            child: const Text("Deutchs")),
+
+      ElevatedButton(
+            onPressed: () {
+              myController.changeLanguage("fr", "FR");
+            },
+            child: const Text("French")),
+
+        ElevatedButton(
+            onPressed: () {
+              myController.changeLanguage("es", "ES");
+            },
+            child: const Text("Spanish")),
+
+            ElevatedButton(
+            onPressed: () {
+              myController.changeLanguage("it", "IT");
+            },
+            child: const Text("Italian"))
+
       ],
     )));
   }
